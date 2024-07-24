@@ -5,6 +5,20 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class SQLController extends GetxController {
+  final titleController = TextEditingController();
+  final timeController = TextEditingController();
+  final descriptionController = TextEditingController();
+
+  void editeUpdate({required title, required time, required description}) {
+    if (updateTaskData) {
+      timeController.text = title;
+      titleController.text = time;
+      descriptionController.text = description;
+      update();
+    }
+  }
+
+
   @override
   void onInit() {
     createDatabase();
@@ -13,7 +27,6 @@ class SQLController extends GetxController {
 
   late Database database;
   List<TodoModel> dataList = [];
-
 
   void createDatabase() async {
     // Get a location using getDatabasesPath
@@ -32,17 +45,17 @@ class SQLController extends GetxController {
     // open the database
     await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
-          // When creating the db, create the table
-          // todo => is our table name / primary key increment auto
-          await db.execute('CREATE TABLE todo (id INTEGER PRIMARY KEY, '
-              'title TEXT, description TEXT,time TEXT, favorite INTEGER,'
-              ' completed INTEGER)');
-          debugPrint("database is Created");
-        }, onOpen: (Database db) {
-          database = db;
-          getAllData();
-          debugPrint("database is opened");
-        });
+      // When creating the db, create the table
+      // todo => is our table name / primary key increment auto
+      await db.execute('CREATE TABLE todo (id INTEGER PRIMARY KEY, '
+          'title TEXT, description TEXT,time TEXT, favorite INTEGER,'
+          ' completed INTEGER)');
+      debugPrint("database is Created");
+    }, onOpen: (Database db) {
+      database = db;
+      getAllData();
+      debugPrint("database is opened");
+    });
   }
 
   void getAllData() async {
@@ -59,20 +72,20 @@ class SQLController extends GetxController {
     required String description,
     required String time,
   }) async {
-   try{
-     var insert = await database.insert("todo", {
-       "title": title,
-       "description": description,
-       "time": time,
-       "favorite": 0,
-       "completed": 0,
-     });
-     Get.back();
-     debugPrint("Data Insert: $insert");
-     getAllData();
-   }catch(e){
-     debugPrint(e.toString());
-   }
+    try {
+      var insert = await database.insert("todo", {
+        "title": title,
+        "description": description,
+        "time": time,
+        "favorite": 0,
+        "completed": 0,
+      });
+      Get.back();
+      debugPrint("Data Insert: $insert");
+      getAllData();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   bool updateTaskData = false;
@@ -83,7 +96,7 @@ class SQLController extends GetxController {
     required String time,
     required int id,
   }) async {
-    try{
+    try {
       var updateData = await database.update(
         "todo",
         {
@@ -98,7 +111,7 @@ class SQLController extends GetxController {
       debugPrint("Updated item $updateData");
       getAllData();
       Get.back();
-    }catch (e){
+    } catch (e) {
       debugPrint(e.toString());
     }
   }

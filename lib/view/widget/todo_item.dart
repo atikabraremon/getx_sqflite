@@ -4,8 +4,6 @@ import 'package:getx_sqflite/controller/controller.dart';
 import 'package:getx_sqflite/view/screen/edite_screen.dart';
 import 'package:path/path.dart';
 
-
-
 class TodoItem extends StatelessWidget {
   const TodoItem({super.key, required this.controller, required this.index});
   final SQLController controller;
@@ -24,16 +22,16 @@ class TodoItem extends StatelessWidget {
             children: [
               Expanded(
                   child: Row(
-                    children: [
-                      const Spacer(),
-                      Expanded(
-                        child: Text(controller.dataList[index].title),
-                      ),
-                      Expanded(
-                        child: Text(controller.dataList[index].time),
-                      ),
-                    ],
-                  )),
+                children: [
+                  const Spacer(),
+                  Expanded(
+                    child: Text(controller.dataList[index].title),
+                  ),
+                  Expanded(
+                    child: Text(controller.dataList[index].time),
+                  ),
+                ],
+              )),
               Expanded(
                 child: Text(controller.dataList[index].description),
               ),
@@ -52,7 +50,15 @@ class TodoItem extends StatelessWidget {
                   IconButton(
                     onPressed: () {
                       controller.updateTaskData = true;
-                      Get.to(()=> EditeScreen(id: controller.dataList[index].id,), transition: Transition.rightToLeft);
+                      Get.to(
+                          () => EditeScreen(
+                                title: controller.dataList[index].title,
+                                description:
+                                    controller.dataList[index].description,
+                                time: controller.dataList[index].time,
+                                id: controller.dataList[index].id,
+                              ),
+                          transition: Transition.rightToLeft);
                     },
                     icon: const Icon(
                       Icons.edit,
